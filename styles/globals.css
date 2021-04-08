@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: "Nunito";
+    src: url("/fonts/Nunito/Nunito-Regular.ttf");
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Nunito";
+    src: url("/fonts/Nunito/Nunito-Italic.ttf");
+    font-style: italic;
+    font-weight: 400;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Nunito";
+    src: url("/fonts/Nunito/Nunito-Bold.ttf");
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Nunito";
+    src: url("/fonts/Nunito/Nunito-Black.ttf");
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+  }
+  html {
+    @apply h-full;
+  }
+  body,
+  #__next {
+    @apply h-full min-h-full;
+  }
+  #__next {
+    @apply flex flex-grow;
+  }
+}
+
+@layer components {
+  .react-calendar {
+    @apply w-full;
+  }
+}
