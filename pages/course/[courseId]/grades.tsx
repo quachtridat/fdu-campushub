@@ -166,11 +166,11 @@ export const CourseGradesPage: NextPage<Props> = ({
                       Grades
                     </h1> */}
                   <span className="flex flex-row justify-between w-full p-2 text-4xl text-white transition-colors border rounded-t-xl bg-oxford-blue-light hover:bg-oxford-blue-dark">
-                    <span className="shadow hover:cursor-pointer">
+                    <span className="h-full shadow hover:cursor-pointer">
                       <FilterIcon className="h-full" />
                     </span>
                     <span>Grades</span>
-                    <span className="shadow hover:cursor-pointer">
+                    <span className="h-full shadow hover:cursor-pointer">
                       <MenuAlt2Icon className="h-full" />
                     </span>
                   </span>
