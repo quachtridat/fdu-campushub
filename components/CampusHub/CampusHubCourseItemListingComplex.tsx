@@ -1,10 +1,10 @@
-import Link from 'next/link'
 import { MouseEventHandler, useState } from 'react'
+
 import Select from 'react-select'
 
-import courseList from '@/data/courses/sample'
+import itemList from '@/data/items/sample'
 
-import { BookOpenIcon as GenericCourseIcon } from '@heroicons/react/solid'
+import { DocumentTextIcon as GenericItemIcon } from '@heroicons/react/solid'
 
 const textMatchers: Array<{ value: string; label: string }> = [
   { value: 'contains', label: 'contains' },
@@ -16,7 +16,7 @@ type PropsType = React.DetailedHTMLProps<
   HTMLDivElement
 >
 
-const CampusHubCourseListingComplex: React.FC<PropsType> = ({
+const CampusHubCourseItemListingComplex: React.FC<PropsType> = ({
   className: otherClassName,
   children: _,
   ...otherProps
@@ -38,13 +38,11 @@ const CampusHubCourseListingComplex: React.FC<PropsType> = ({
             <fieldset className="flex flex-row items-center flex-1 h-full space-x-2">
               {/* <input type="text" id="txtNavBarSearch" name="txtNavBarSearch" placeholder="Search" className="flex-1 rounded focus:ring-oxford-blue-dark focus:border-oxford-blue-dark" /> */}
               <Select
-                instanceId="selectCourseListingSearch"
+                instanceId="selectCourseItemListingSearch"
+                placeholder="Search"
                 isClearable={true}
-                options={courseList.map<{ label: string; value: string }>(
-                  (courseEntry) => ({
-                    value: courseEntry.courseId.toString(10),
-                    label: `${courseEntry.courseCode} ${courseEntry.courseName}`,
-                  })
+                options={itemList.map<{ value: string; label: string }>(
+                  (item) => ({ value: item.id.toString(10), label: item.title })
                 )}
                 className="flex-1 border border-black rounded focus:ring-oxford-blue-dark focus:border-oxford-blue-dark"
               />
@@ -73,9 +71,9 @@ const CampusHubCourseListingComplex: React.FC<PropsType> = ({
         <form>
           <fieldset className="flex flex-col space-y-6">
             <div className="flex flex-row items-center space-x-4">
-              <span className="w-40">Course code</span>
+              <span className="w-40">Title</span>
               <Select
-                instanceId="selectCourseCodeTextMatchers"
+                instanceId="selectItemTitleTextMatchers"
                 options={textMatchers}
                 isClearable={false}
                 isSearchable={false}
@@ -88,19 +86,8 @@ const CampusHubCourseListingComplex: React.FC<PropsType> = ({
               />
             </div>
             <div className="flex flex-row items-center space-x-4">
-              <span className="w-40">Course name</span>
-              <Select
-                instanceId="selectCourseNameTextMatchers"
-                options={textMatchers}
-                isClearable={false}
-                isSearchable={false}
-                className="inline-block min-w-[10rem]"
-              />
-              <input
-                type="text"
-                placeholder="Keywords"
-                className="flex-1 rounded"
-              />
+              <span className="w-40">Is gradable</span>
+              <input type="checkbox" name="chkIsGradable" />
             </div>
             <div className="flex flex-row items-center space-x-4">
               <span className="w-40">Filter X</span>
@@ -126,33 +113,33 @@ const CampusHubCourseListingComplex: React.FC<PropsType> = ({
         </form>
       </div>
       <div className="p-2 space-y-6">
-        {courseList.map((courseEntry, courseIndex) => (
+        {itemList.map((itemEntry, itemIndex) => (
           <div
-            key={courseIndex}
+            key={itemIndex}
             className="w-full px-2 py-4 transition transform border border-black rounded hover:translate-y-1 hover:cursor-pointer group"
           >
-            <Link href={`/course/${courseEntry.courseId}`}>
-              <a className="flex flex-row items-center">
-                <span className="inline-flex items-center max-w-xs px-2">
-                  <GenericCourseIcon
-                    width={50}
-                    height={50}
-                    className="inline-block"
-                  />
+            <span className="flex flex-row items-center">
+              <span className="inline-flex items-center max-w-xs px-2">
+                <GenericItemIcon
+                  width={50}
+                  height={50}
+                  className="inline-block"
+                />
+              </span>
+              <div className="inline-flex flex-col justify-around flex-1 px-2 border-l border-black">
+                <span className="text-xl font-bold text-left">
+                  {itemEntry.title}
                 </span>
-                <div className="inline-flex flex-col justify-around flex-1 px-2 border-l border-black">
-                  <span className="text-xl font-bold text-left">
-                    {courseEntry.courseCode} {courseEntry.courseName}
-                  </span>
-                  <span className="italic">
-                    <span>Instructors:</span> {courseEntry.instructors}
-                  </span>
-                </div>
-                <span className="text-transparent group-hover:text-vivid-burgundy">
-                  &rarr;
+                <span className="italic">
+                  <span>Created:</span>{' '}
+                  {itemEntry.creationDate.toLocaleDateString('en-CA')}{' '}
+                  {itemEntry.creationDate.toLocaleTimeString('en-CA')}
                 </span>
-              </a>
-            </Link>
+              </div>
+              <span className="text-transparent group-hover:text-vivid-burgundy">
+                &rarr;
+              </span>
+            </span>
           </div>
         ))}
       </div>
@@ -160,4 +147,4 @@ const CampusHubCourseListingComplex: React.FC<PropsType> = ({
   )
 }
 
-export default CampusHubCourseListingComplex
+export default CampusHubCourseItemListingComplex

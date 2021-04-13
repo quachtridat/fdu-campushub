@@ -13,7 +13,7 @@ module.exports = {
       fontFamily: {
         sans: ['Nunito'],
         body: ['Nunito'],
-      }
+      },
     },
   },
   variants: {
@@ -27,4 +27,4 @@ module.exports = {
     require('@tailwindcss/line-clamp'),
     require('@tailwindcss/aspect-ratio'),
   ],
-};
+}
