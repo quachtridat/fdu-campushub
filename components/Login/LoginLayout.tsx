@@ -42,8 +42,16 @@ const LoginLayout: React.FC<PropsType> = ({
       </div>
       {children}
       <div className="flex flex-col items-center justify-around p-4 bg-white border-t border-black">
-      <p>Written by <Link href="https://github.com/quachtridat"><a className="italic underline">Dat Quach</a></Link>.</p>
-        <p className="font-bold">This site is created solely for educational purposes.</p>
+        <p>
+          Written by{' '}
+          <Link href="https://github.com/quachtridat">
+            <a className="italic underline">Dat Quach</a>
+          </Link>
+          .
+        </p>
+        <p className="font-bold">
+          This site is created solely for educational purposes.
+        </p>
       </div>
     </div>
   )

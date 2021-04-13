@@ -149,27 +149,30 @@ export const CoursePage: NextPage<Props> = ({ course: currentCourse }) => {
                   <h1 className="w-full p-2 text-4xl text-center text-white transition-colors border-t border-l border-r border-black rounded-t-xl bg-oxford-blue-light hover:bg-oxford-blue-dark">
                     Course Items
                   </h1>
-                  <CampusHubCourseItemListingComplex />
+                  <CampusHubCourseItemListingComplex className="border-0 border-b border-l border-r rounded-none rounded-b" />
                 </div>
               </>
             )}
           </div>
           <div className="flex flex-col items-center w-full max-w-md p-8 space-y-12 lg:max-w-lg bg-gray-50">
             <div className="w-full p-1">
-              <span className="block w-full p-2 text-4xl text-center text-white transition-colors border rounded-t-xl bg-oxford-blue-light hover:bg-oxford-blue-dark">
+              <span className="block w-full p-2 text-4xl text-center text-white transition-colors border-t border-l border-r border-black rounded-t-xl bg-oxford-blue-light hover:bg-oxford-blue-dark">
                 Calendar
               </span>
               <div className="w-full">
-                <Calendar locale="en-US" className="w-full" />
+                <Calendar
+                  locale="en-US"
+                  className="w-full border-0 border-b border-l border-r border-black rounded-b"
+                />
               </div>
             </div>
             <div className="w-full p-1">
-              <span className="flex flex-row justify-between w-full p-2 text-4xl text-center text-white transition-colors border rounded-t-xl bg-oxford-blue-light hover:bg-oxford-blue-dark">
+              <span className="flex flex-row justify-between w-full p-2 text-4xl text-center text-white transition-colors border-t border-l border-r border-black rounded-t-xl bg-oxford-blue-light hover:bg-oxford-blue-dark">
                 <span className="shadow hover:cursor-pointer">&larr;</span>
                 <span>Announcements</span>
                 <span className="shadow hover:cursor-pointer">&rarr;</span>
               </span>
-              <div className="flex flex-col flex-1 w-full max-h-full p-2 space-y-1 bg-white border border-black border-solid rounded">
+              <div className="flex flex-col flex-1 w-full max-h-full p-2 space-y-1 bg-white border-b border-l border-r border-black rounded-b">
                 <span className="font-bold border-b border-black">
                   {announcement.title}
                 </span>

@@ -36,7 +36,6 @@ const CampusHubCourseListingComplex: React.FC<PropsType> = ({
         <div className="flex flex-row items-center justify-between flex-1 space-x-4">
           <form className="flex flex-row items-center flex-1 h-full">
             <fieldset className="flex flex-row items-center flex-1 h-full space-x-2">
-              {/* <input type="text" id="txtNavBarSearch" name="txtNavBarSearch" placeholder="Search" className="flex-1 rounded focus:ring-oxford-blue-dark focus:border-oxford-blue-dark" /> */}
               <Select
                 instanceId="selectCourseListingSearch"
                 isClearable={true}
