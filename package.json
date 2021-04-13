@@ -2,7 +2,7 @@
   "name": "with-typescript-eslint-jest",
   "author": "@erikdstock",
   "license": "MIT",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "scripts": {
     "debug": "Set-ExecutionPolicy Unrestricted -Scope CurrentUser; $env:NODE_OPTIONS='--inspect'; next dev",
     "dev": "next dev",

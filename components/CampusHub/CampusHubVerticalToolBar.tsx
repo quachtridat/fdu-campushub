@@ -43,7 +43,6 @@ const CampusHubVerticalToolBar: React.FC<PropsType> = ({
             <legend className="w-full text-center">Filter</legend>
             {filterExpanded ? (
               <>
-                {/* <input type="text" id="txtToolBarFilter" name="txtToolBarFilter" placeholder="Search Tools" className="w-full text-black rounded focus:ring-vivid-burgundy focus:border-vivid-burgundy" /> */}
                 <Select
                   instanceId="selectVerticalToolBarSearch"
                   placeholder="Search Tools"

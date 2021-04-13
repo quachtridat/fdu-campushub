@@ -91,6 +91,16 @@ export const getStaticProps: GetStaticProps<Props, RouterQuery> = async (
   }
 }
 
+const navAddSearchOptions: Array<{ value: string; label: string }> = [
+  { value: 'course.overview', label: 'Overview' },
+  { value: 'course.announcements', label: 'Announcements' },
+  { value: 'course.documents', label: 'Documents' },
+  { value: 'course.assignments', label: 'Assignments' },
+  { value: 'course.discussions', label: 'Discussions' },
+  { value: 'course.grades', label: 'Grades' },
+  { value: 'course.homepage', label: 'Home' },
+]
+
 export const CourseGradesPage: NextPage<Props> = ({
   course: currentCourse,
 }) => {
@@ -120,7 +130,7 @@ export const CourseGradesPage: NextPage<Props> = ({
   }
 
   return (
-    <CampusHubLayout>
+    <CampusHubLayout navDefinedSearchOptions={navAddSearchOptions}>
       <Head>
         <title>FDU CampusHub</title>
       </Head>
@@ -165,12 +175,12 @@ export const CourseGradesPage: NextPage<Props> = ({
                   {/* <h1 className="w-full p-2 text-4xl text-center text-white transition-colors border-t border-l border-r border-black rounded-t-xl bg-oxford-blue-light hover:bg-oxford-blue-dark">
                       Grades
                     </h1> */}
-                  <span className="flex flex-row justify-between w-full p-2 text-4xl text-white transition-colors border rounded-t-xl bg-oxford-blue-light hover:bg-oxford-blue-dark">
-                    <span className="shadow hover:cursor-pointer">
+                  <span className="flex flex-row justify-between w-full p-2 text-4xl text-white transition-colors border-t border-l border-r border-black rounded-t-xl bg-oxford-blue-light hover:bg-oxford-blue-dark">
+                    <span className="h-full shadow hover:cursor-pointer">
                       <FilterIcon className="h-full" />
                     </span>
                     <span>Grades</span>
-                    <span className="shadow hover:cursor-pointer">
+                    <span className="h-full shadow hover:cursor-pointer">
                       <MenuAlt2Icon className="h-full" />
                     </span>
                   </span>
@@ -237,10 +247,10 @@ export const CourseGradesPage: NextPage<Props> = ({
           </div>
           <div className="flex flex-col items-center w-full max-w-md p-8 space-y-12 lg:max-w-lg bg-gray-50">
             <div className="w-full p-1">
-              <span className="block w-full p-2 text-4xl text-center text-white transition-colors border rounded-t-xl bg-oxford-blue-light hover:bg-oxford-blue-dark">
+              <span className="block w-full p-2 text-4xl text-center text-white transition-colors border-t border-l border-r border-black rounded-t-xl bg-oxford-blue-light hover:bg-oxford-blue-dark">
                 Comments
               </span>
-              <div className="flex flex-col flex-1 w-full max-h-full p-2 space-y-1 bg-white border border-black border-solid rounded">
+              <div className="flex flex-col flex-1 w-full max-h-full p-2 space-y-1 bg-white border-b border-l border-r border-black border-solid rounded-b">
                 {activeGradeEntry ? (
                   <>
                     <span className="font-bold border-b border-black">

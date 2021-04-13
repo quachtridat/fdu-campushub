@@ -1,17 +1,21 @@
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import { isSignedIn } from '@/lib/signIn'
-import MainPage from './main'
-import LoginPage from './login'
 
 const IndexPage: NextPage = () => {
   const router = useRouter()
-  if (typeof window !== 'undefined') {
-    if (!isSignedIn()) {
-      router.push('/login')
-      return <LoginPage />
-    } else return <MainPage />
-  }
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (!isSignedIn()) {
+        router.push('/login')
+      } else {
+        router.push('/main')
+      }
+    } else {
+      router.push('/main')
+    }
+  }, [])
   return <></>
 }
 
