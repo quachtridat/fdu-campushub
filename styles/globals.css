@@ -4,29 +4,29 @@
 
 @layer base {
   @font-face {
-    font-family: "Nunito";
-    src: url("/fonts/Nunito/Nunito-Regular.ttf");
+    font-family: 'Nunito';
+    src: url('/fonts/Nunito/Nunito-Regular.ttf');
     font-style: normal;
     font-weight: 400;
     font-display: swap;
   }
   @font-face {
-    font-family: "Nunito";
-    src: url("/fonts/Nunito/Nunito-Italic.ttf");
+    font-family: 'Nunito';
+    src: url('/fonts/Nunito/Nunito-Italic.ttf');
     font-style: italic;
     font-weight: 400;
     font-display: swap;
   }
   @font-face {
-    font-family: "Nunito";
-    src: url("/fonts/Nunito/Nunito-Bold.ttf");
+    font-family: 'Nunito';
+    src: url('/fonts/Nunito/Nunito-Bold.ttf');
     font-style: normal;
     font-weight: 700;
     font-display: swap;
   }
   @font-face {
-    font-family: "Nunito";
-    src: url("/fonts/Nunito/Nunito-Black.ttf");
+    font-family: 'Nunito';
+    src: url('/fonts/Nunito/Nunito-Black.ttf');
     font-style: normal;
     font-weight: 900;
     font-display: swap;
@@ -47,4 +47,12 @@
   .react-calendar {
     @apply w-full;
   }
+}
+
+#login-layout {
+  background-image: url('/static/fdu/login.jpg');
+}
+
+#login-wrapper {
+  background-color: rgba(0, 0, 0, 0.75);
 }

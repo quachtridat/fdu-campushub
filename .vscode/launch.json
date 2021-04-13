@@ -9,9 +9,7 @@
       "port": 9229,
       "request": "attach",
       "type": "pwa-msedge",
-      "skipFiles": [
-        "${workspaceFolder}/node_modules/**/*.js"
-      ],
+      "skipFiles": ["${workspaceFolder}/node_modules/**/*.js"],
       "webRoot": "${workspaceFolder}"
     },
     {
@@ -25,9 +23,7 @@
       "type": "node",
       "request": "attach",
       "name": "Launch Program",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
+      "skipFiles": ["<node_internals>/**"],
       "port": 9229
     }
   ]
