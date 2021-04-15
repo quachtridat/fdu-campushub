@@ -32,10 +32,10 @@ const CampusHubVerticalToolBar: React.FC<PropsType> = ({
 
   return (
     <div
-      {...otherProps}
-      className={`min-w-min space-y-4 py-4 bg-oxford-blue-dark text-white flex flex-col flex-1 ${
+      className={`min-w-max space-y-4 py-4 bg-oxford-blue-dark text-white flex flex-col ${
         propClassName || ''
       }`}
+      {...otherProps}
     >
       <div className="flex flex-col border-b border-white">
         <form action="#" className="w-full">
@@ -71,36 +71,38 @@ const CampusHubVerticalToolBar: React.FC<PropsType> = ({
         </span>
       </div>
       <div className="h-full pb-16 space-y-6 overflow-y-auto">
-        {tiles.map((tile, tileIdx) => {
-          const inner = (
-            <div className="flex flex-col items-center justify-around w-20 py-2 mx-auto transition transform group-hover:translate-y-1">
-              <span className="w-1/2">{tile.icon}</span>
-              <span
-                className={`${activeTileKey === tile.key ? 'font-bold' : ''}`}
+        {
+          tiles ? tiles.map((tile, tileIdx) => {
+            const inner = (
+              <div className="flex flex-col items-center justify-around w-20 py-2 mx-auto transition transform group-hover:translate-y-1">
+                <span className="w-1/2">{tile.icon}</span>
+                <span
+                  className={`${activeTileKey === tile.key ? 'font-bold' : ''}`}
+                >
+                  {tile.name}
+                </span>
+              </div>
+            )
+            return (
+              <div
+                key={tileIdx}
+                className={`text-center w-full border-l-2 transition ${
+                  tile.key === activeTileKey
+                    ? 'border-vivid-burgundy bg-vivid-burgundy'
+                    : 'bg-transparent border-transparent'
+                } hover:bg-usafa-blue group hover:cursor-pointer`}
               >
-                {tile.name}
-              </span>
-            </div>
-          )
-          return (
-            <div
-              key={tileIdx}
-              className={`text-center w-full border-l-2 transition ${
-                tile.key === activeTileKey
-                  ? 'border-vivid-burgundy bg-vivid-burgundy'
-                  : 'bg-transparent border-transparent'
-              } hover:bg-usafa-blue group hover:cursor-pointer`}
-            >
-              {tile.link ? (
-                <Link href={tile.link}>
-                  <a>{inner}</a>
-                </Link>
-              ) : (
-                inner
-              )}
-            </div>
-          )
-        })}
+                {tile.link ? (
+                  <Link href={tile.link}>
+                    <a>{inner}</a>
+                  </Link>
+                ) : (
+                  inner
+                )}
+              </div>
+            )
+          }) : <></>
+        }
       </div>
     </div>
   )

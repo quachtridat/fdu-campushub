@@ -3,6 +3,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'node:querystring'
 import { useState, useEffect, MouseEventHandler } from 'react'
+import ReactModal from 'react-modal';
 
 import CampusHubVerticalToolBar, {
   ToolTile,
@@ -23,6 +24,8 @@ import {
   ChatAlt2Icon as DiscussionsNavIcon,
   ChartSquareBarIcon as GradesIcon,
   HomeIcon as HomeNavIcon,
+  CalendarIcon,
+  XIcon as CloseIcon
 } from '@heroicons/react/outline'
 
 import {
@@ -38,20 +41,6 @@ interface Props {
 export interface RouterQuery extends ParsedUrlQuery {
   courseId: string
 }
-
-const tiles: Array<ToolTile> = [
-  { key: 'overview', name: 'Overview', icon: <OverviewNavIcon /> },
-  {
-    key: 'announcements',
-    name: 'Announcements',
-    icon: <AnnoucementsNavIcon />,
-  },
-  { key: 'documents', name: 'Documents', icon: <DocumentsNavIcon /> },
-  { key: 'assignments', name: 'Assignments', icon: <AssignmentsNavIcon /> },
-  { key: 'discusisons', name: 'Discussions', icon: <DiscussionsNavIcon /> },
-  { key: 'grades', name: 'Grades', icon: <GradesIcon /> },
-  { key: 'homepage', name: 'Home', icon: <HomeNavIcon />, link: '/' },
-]
 
 export const getStaticPaths: GetStaticPaths<RouterQuery> = async () => {
   return {
@@ -92,13 +81,56 @@ export const getStaticProps: GetStaticProps<Props, RouterQuery> = async (
 }
 
 const navAddSearchOptions: Array<{ value: string; label: string }> = [
-  { value: 'course.overview', label: 'Overview' },
+  { value: 'course.overview', label: 'Course Overview' },
   { value: 'course.announcements', label: 'Announcements' },
   { value: 'course.documents', label: 'Documents' },
   { value: 'course.assignments', label: 'Assignments' },
   { value: 'course.discussions', label: 'Discussions' },
   { value: 'course.grades', label: 'Grades' },
-  { value: 'course.homepage', label: 'Home' },
+  { value: 'course.calendar', label: 'Calendar' },
+  {
+    value: 'homepage',
+    label: 'Home',
+  },
+  {
+    value: 'courses',
+    label: 'Courses',
+  },
+  {
+    value: 'announcements',
+    label: 'Announcements',
+  },
+  {
+    value: 'grades',
+    label: 'Grades',
+  },
+  {
+    value: 'calendar',
+    label: 'Calendar',
+  },
+  {
+    value: 'student-services',
+    label: 'Student Services',
+  },
+  {
+    value: 'blackboard',
+    label: 'Blackboard',
+  },
+]
+
+const tiles: Array<ToolTile> = [
+  { key: 'homepage', name: 'Home', icon: <HomeNavIcon />, link: '/' },
+  { key: 'course.overview', name: 'Course Overview', icon: <OverviewNavIcon /> },
+  {
+    key: 'course.announcements',
+    name: 'Announcements',
+    icon: <AnnoucementsNavIcon />,
+  },
+  { key: 'course.documents', name: 'Documents', icon: <DocumentsNavIcon /> },
+  { key: 'course.assignments', name: 'Assignments', icon: <AssignmentsNavIcon /> },
+  { key: 'course.discusisons', name: 'Discussions', icon: <DiscussionsNavIcon /> },
+  { key: 'course.grades', name: 'Grades', icon: <GradesIcon /> },
+  { key: 'course.calendar', name: 'Calendar', icon: <CalendarIcon /> },
 ]
 
 export const CourseGradesPage: NextPage<Props> = ({
@@ -106,18 +138,22 @@ export const CourseGradesPage: NextPage<Props> = ({
 }) => {
   const router = useRouter()
 
-  if (currentCourse) {
-    const overviewTile = tiles.find((tile) => tile.key === 'overview')
-    if (overviewTile) overviewTile.link = `/course/${currentCourse.courseId}`
-  }
-
   const [grades, setGrades] = useState<Array<Grade>>([])
+
   useEffect(() => {
     if (currentCourse) setGrades(getCourseGrades(currentCourse.courseId))
   }, [currentCourse])
 
   const [activeGradeEntryIndex, setActiveGradeEntryIndex] = useState(-1)
   const [activeGradeEntry, setActiveGradeEntry] = useState<Grade>()
+  const [shallUseModal, setShallUseModal] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024/*lg*/) {
+      setShallUseModal(true);
+    } else setShallUseModal(false);
+  })
 
   const handleOnClickGradeEntry: (
     gradeEntryKey: number,
@@ -126,7 +162,14 @@ export const CourseGradesPage: NextPage<Props> = ({
     return () => {
       setActiveGradeEntryIndex(gradeEntryKey)
       setActiveGradeEntry(gradeEntry)
+      if (shallUseModal) {
+        setIsModalOpen(true);
+      }
     }
+  }
+
+  const handleOnRequestCloseReactModal = (): void => {
+    setIsModalOpen(false)
   }
 
   return (
@@ -136,8 +179,8 @@ export const CourseGradesPage: NextPage<Props> = ({
       </Head>
       <div className="flex flex-row flex-1 pl-40 pt-[4rem]">
         <CampusHubVerticalToolBar
-          tiles={tiles}
-          activeTileKey="grades"
+          tiles={tiles && currentCourse ? tiles.map<ToolTile>((tile) => tile.key === 'course.overview' ? { ...tile, link: `/course/${currentCourse.courseId}/` } : tile) : tiles}
+          activeTileKey="course.grades"
           className="fixed top-[4rem] z-50 left-0 w-40 h-full max-h-full bg-oxford-blue-dark"
         />
         <main className="flex flex-row flex-1">
@@ -172,9 +215,6 @@ export const CourseGradesPage: NextPage<Props> = ({
                   </div>
                 </div>
                 <div className="w-full mx-auto">
-                  {/* <h1 className="w-full p-2 text-4xl text-center text-white transition-colors border-t border-l border-r border-black rounded-t-xl bg-oxford-blue-light hover:bg-oxford-blue-dark">
-                      Grades
-                    </h1> */}
                   <span className="flex flex-row justify-between w-full p-2 text-4xl text-white transition-colors border-t border-l border-r border-black rounded-t-xl bg-oxford-blue-light hover:bg-oxford-blue-dark">
                     <span className="h-full shadow hover:cursor-pointer">
                       <FilterIcon className="h-full" />
@@ -194,7 +234,7 @@ export const CourseGradesPage: NextPage<Props> = ({
                               gradeIndex,
                               gradeEntry
                             )}
-                            className={`w-full px-2 py-4 transition transform border border-black rounded hover:translate-y-1 hover:cursor-pointer ${
+                            className={`flex flex-col w-full px-2 py-4 space-y-2 transition transform border border-black rounded hover:translate-y-1 hover:cursor-pointer ${
                               activeGradeEntryIndex == gradeIndex
                                 ? 'ring ring-vivid-burgundy'
                                 : ''
@@ -228,6 +268,9 @@ export const CourseGradesPage: NextPage<Props> = ({
                                 <span>{`${gradeEntry.gradable.grade}/${gradeEntry.gradable.maxGrade}`}</span>
                               </span>
                             </span>
+                            <span className="w-full mt-2 text-sm italic text-center lg:hidden">
+                              Tap to view comments from instructors
+                            </span>
                           </div>
                         ))
                       ) : (
@@ -241,11 +284,37 @@ export const CourseGradesPage: NextPage<Props> = ({
                       </span>
                     )}
                   </div>
+                  <ReactModal
+                    isOpen={isModalOpen}
+                    shouldCloseOnOverlayClick={true}
+                    shouldCloseOnEsc={true}
+                    shouldReturnFocusAfterClose={true}
+                    onRequestClose={handleOnRequestCloseReactModal}
+                    className="top-[5rem] left-44 right-8 border border-black rounded bg-white absolute"
+                  >
+                    <CloseIcon width="2em" className="absolute bottom-auto left-auto right-1 top-1 hover:cursor-pointer" onClick={handleOnRequestCloseReactModal} />
+                    <div className="p-1 text-xs text-center text-gray-400 hover:cursor-pointer" onClick={handleOnRequestCloseReactModal}>
+                      To close, tap the X button
+                    </div>
+                    <div className="w-full max-w-xl px-4 pt-6 pb-6 mx-auto space-y-2">
+                      <p className="w-full p-2 text-2xl font-bold text-center text-white bg-oxford-blue-light">Comments from instructors</p>
+                      <hr />
+                      <p>
+                        {
+                          activeGradeEntry && activeGradeEntry.gradable.comments && activeGradeEntry.gradable.comments.length > 0 ?
+                          activeGradeEntry.gradable.comments :
+                          <span className="block w-full italic text-center">
+                            **No comments have been given**
+                          </span>
+                        }
+                      </p>
+                    </div>
+                  </ReactModal>
                 </div>
               </>
             )}
           </div>
-          <div className="flex flex-col items-center w-full max-w-md p-8 space-y-12 lg:max-w-lg bg-gray-50">
+          <div className="flex-col items-center hidden w-full max-w-md p-8 space-y-12 lg:flex xl:max-w-md 2xl:max-w-lg bg-gray-50">
             <div className="w-full p-1">
               <span className="block w-full p-2 text-4xl text-center text-white transition-colors border-t border-l border-r border-black rounded-t-xl bg-oxford-blue-light hover:bg-oxford-blue-dark">
                 Comments
