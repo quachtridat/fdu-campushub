@@ -29,14 +29,13 @@ const CampusHubCourseItemListingComplex: React.FC<PropsType> = ({
 
   return (
     <div
-      {...otherProps}
       className={`border border-black rounded ${otherClassName}`}
+      {...otherProps}
     >
       <div className="p-2 border-b border-black">
         <div className="flex flex-row items-center justify-between flex-1 space-x-4">
           <form className="flex flex-row items-center flex-1 h-full">
             <fieldset className="flex flex-row items-center flex-1 h-full space-x-2">
-              {/* <input type="text" id="txtNavBarSearch" name="txtNavBarSearch" placeholder="Search" className="flex-1 rounded focus:ring-oxford-blue-dark focus:border-oxford-blue-dark" /> */}
               <Select
                 instanceId="selectCourseItemListingSearch"
                 placeholder="Search"
@@ -69,38 +68,42 @@ const CampusHubCourseItemListingComplex: React.FC<PropsType> = ({
         className={`border-b border-black p-2 ${!isUsingFilters && 'hidden'}`}
       >
         <form>
-          <fieldset className="flex flex-col space-y-6">
-            <div className="flex flex-row items-center space-x-4">
-              <span className="w-40">Title</span>
-              <Select
-                instanceId="selectItemTitleTextMatchers"
-                options={textMatchers}
-                isClearable={false}
-                isSearchable={false}
-                className="inline-block min-w-[10rem]"
-              />
+         <fieldset className="flex flex-col space-y-6">
+            <div className="flex flex-col space-y-2 lg:flex-row lg:items-center lg:space-x-4 lg:space-y-0">
+              <div className="space-x-2 lg:space-x-4">
+                <span>Title</span>
+                <Select
+                  instanceId="selectItemTitleTextMatchers"
+                  options={textMatchers}
+                  isClearable={false}
+                  isSearchable={false}
+                  className="inline-block min-w-[10rem]"
+                />
+              </div>
               <input
                 type="text"
-                placeholder="Keywords"
+                placeholder="Title keywords..."
                 className="flex-1 rounded"
               />
             </div>
-            <div className="flex flex-row items-center space-x-4">
-              <span className="w-40">Is gradable</span>
+            <div className="flex flex-row space-x-2 lg:items-center lg:space-x-4">
+              <span>Is gradable</span>
               <input type="checkbox" name="chkIsGradable" />
             </div>
-            <div className="flex flex-row items-center space-x-4">
-              <span className="w-40">Filter X</span>
-              <Select
-                instanceId="selectFilterXTextMatchers"
-                options={textMatchers}
-                isClearable={false}
-                isSearchable={false}
-                className="inline-block min-w-[10rem]"
-              />
+            <div className="flex flex-col space-y-2 lg:flex-row lg:items-center lg:space-x-4 lg:space-y-0">
+              <div className="space-x-2 lg:space-x-4">
+                <span>Filter X</span>
+                <Select
+                  instanceId="selectFilterXTextMatchers"
+                  options={textMatchers}
+                  isClearable={false}
+                  isSearchable={false}
+                  className="inline-block min-w-[10rem]"
+                />
+              </div>
               <input
                 type="text"
-                placeholder="Keywords"
+                placeholder="Filter X keywords..."
                 className="flex-1 rounded"
               />
             </div>

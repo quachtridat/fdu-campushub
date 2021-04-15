@@ -39,7 +39,7 @@
     @apply h-full min-h-full;
   }
   #__next {
-    @apply flex flex-grow;
+    @apply flex flex-col flex-grow;
   }
 }
 
@@ -51,6 +51,12 @@
 
 #login-layout {
   background-image: url('/static/fdu/login.jpg');
+}
+
+@media screen and (orientation: portrait) {
+  #login-layout {
+    background-image: url('/static/fdu/login-vertical.jpg');
+  }
 }
 
 #login-wrapper {

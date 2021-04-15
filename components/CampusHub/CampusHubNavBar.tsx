@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { MouseEventHandler } from 'react'
 import Select from 'react-select'
 import { signOut } from '@/lib/signOut'
+import { MenuIcon } from '@heroicons/react/outline'
 
 interface Props {
   definedSearchOptions?: Array<{ value: string; label: string }>
@@ -11,10 +12,6 @@ interface Props {
 
 type PropsType = Props &
   React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
-
-const predefinedSearchOptions: Array<{ value: string; label: string }> = [
-  { value: 'courses', label: 'Courses' },
-]
 
 const CampusHubNavBar: React.FC<PropsType> = ({
   definedSearchOptions,
@@ -33,10 +30,10 @@ const CampusHubNavBar: React.FC<PropsType> = ({
 
   return (
     <div
-      {...otherProps}
-      className={`${
+      className={`bg-white border-b border-black border-solid py-2 flex flex-row pr-2 space-x-2 ${
         propClassName || ''
-      } bg-white border-b border-black border-solid py-2 flex flex-row pr-2 space-x-2`}
+      }`}
+      {...otherProps}
     >
       <span className="flex items-center justify-around flex-shrink-0 w-40 text-center">
         <Link href="https://fdu.edu/">
@@ -52,16 +49,11 @@ const CampusHubNavBar: React.FC<PropsType> = ({
       <div className="flex flex-row flex-1 h-full space-x-4">
         <form className="flex flex-row flex-1 h-full">
           <fieldset className="flex flex-row items-center flex-1 h-full space-x-2">
-            {/* <input type="text" id="txtNavBarSearch" name="txtNavBarSearch" placeholder="Search" className="flex-1 rounded focus:ring-oxford-blue-dark focus:border-oxford-blue-dark" /> */}
             <Select
               instanceId="selectNavBarSearch"
               placeholder="Search"
               isClearable={true}
-              options={
-                definedSearchOptions
-                  ? [...definedSearchOptions, ...predefinedSearchOptions]
-                  : predefinedSearchOptions
-              }
+              options={definedSearchOptions}
               className="flex-1 border border-black rounded focus:ring-oxford-blue-dark focus:border-oxford-blue-dark"
             />
             <input
@@ -71,22 +63,25 @@ const CampusHubNavBar: React.FC<PropsType> = ({
             />
           </fieldset>
         </form>
-        <span className="flex flex-row items-center h-full p-2 space-x-1 text-white border border-black rounded hover:cursor-pointer bg-oxford-blue-light hover:bg-oxford-blue-dark">
-          <Image
-            src="/static/profile/datquach.png"
-            width={30}
-            height={30}
-            className="rounded-full"
-          />
-          <span>Dat Quach</span>
-        </span>
         <form className="flex flex-row self-end h-full">
           <fieldset className="flex flex-row items-center flex-1 h-full space-x-2">
+            <span className="flex-row items-center hidden h-full p-2 space-x-1 text-white border border-black rounded lg:flex hover:cursor-pointer bg-oxford-blue-light hover:bg-oxford-blue-dark">
+              <Image
+                src="/static/profile/datquach.png"
+                width={30}
+                height={30}
+                className="rounded-full"
+              />
+              <span>Dat Quach</span>
+            </span>
             <input
               type="button"
               value="Settings"
-              className="px-4 py-2 text-white rounded bg-oxford-blue-light hover:cursor-pointer hover:bg-oxford-blue-dark"
+              className="hidden px-4 py-2 text-white rounded lg:inline-block bg-oxford-blue-light hover:cursor-pointer hover:bg-oxford-blue-dark"
             />
+            <span className="flex flex-row items-center px-4 py-3 text-white rounded lg:hidden bg-oxford-blue-light hover:cursor-pointer hover:bg-oxford-blue-dark">
+              <MenuIcon height="1em" />
+            </span>
             <input
               type="button"
               value="Sign Out"

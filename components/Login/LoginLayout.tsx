@@ -12,9 +12,10 @@ const LoginLayout: React.FC<PropsType> = ({
   ...otherProps
 }) => {
   return (
+    // #login-layout: has background-image (@/styles/globals.css)
     <div
       id="login-layout"
-      className={`flex flex-col flex-1 bg-center bg-cover ${
+      className={`flex flex-col flex-1 ${
         propClassName || ''
       }`}
       {...otherProps}
@@ -29,7 +30,7 @@ const LoginLayout: React.FC<PropsType> = ({
             />
           </a>
         </Link>
-        <span className="text-4xl font-bold">Login Authentication</span>
+        <span className="text-xl font-bold lg:text-4xl">Login Authentication</span>
         <Link href="/">
           <a className="w-[300px]">
             <Image

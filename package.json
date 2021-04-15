@@ -2,7 +2,7 @@
   "name": "with-typescript-eslint-jest",
   "author": "@erikdstock",
   "license": "MIT",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "scripts": {
     "debug": "Set-ExecutionPolicy Unrestricted -Scope CurrentUser; $env:NODE_OPTIONS='--inspect'; next dev",
     "dev": "next dev",
@@ -34,11 +34,13 @@
     "@tailwindcss/line-clamp": "^0.2.0",
     "@tailwindcss/typography": "^0.4.0",
     "@types/react-calendar": "^3.1.4",
+    "@types/react-modal": "^3.12.0",
     "@types/react-select": "^4.0.14",
     "next": "latest",
     "react": "^17.0.1",
     "react-calendar": "^3.3.1",
     "react-dom": "^17.0.1",
+    "react-modal": "^3.13.1",
     "react-select": "^4.3.0"
   },
   "devDependencies": {
