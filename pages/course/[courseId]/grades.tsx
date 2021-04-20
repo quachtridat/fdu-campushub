@@ -92,7 +92,7 @@ export const CourseGradesPage: NextPage<Props> = ({
     if (typeof window !== 'undefined' && window.innerWidth < 1024 /*lg*/) {
       setShallUseModal(true)
     } else setShallUseModal(false)
-  })
+  }, [typeof window !== 'undefined' && window.innerWidth])
 
   const handleOnClickGradeEntry: (
     gradeEntryKey: number,
@@ -288,7 +288,9 @@ export const CourseGradesPage: NextPage<Props> = ({
                       {activeGradeEntry.gradable.dueDate.toDateString()}
                     </span>
                     <p className="w-100 h-100">
-                      {activeGradeEntry.gradable.comments || '**No comments**'}
+                      {activeGradeEntry.gradable.comments || (
+                        <>**No comments have been given**</>
+                      )}
                     </p>
                   </>
                 ) : (

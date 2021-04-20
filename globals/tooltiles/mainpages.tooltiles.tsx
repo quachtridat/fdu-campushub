@@ -33,18 +33,26 @@ const tiles: Array<ToolTile> = [
     key: 'grades',
     name: 'Grades',
     icon: <GradesNavIcon />,
+    link: '/grades',
   },
   {
     key: 'calendar',
     name: 'Calendar',
     icon: <CalendarNavIcon />,
+    link: '/calendar',
   },
   {
     key: 'student-services',
     name: 'Student Services',
     icon: <StudentServicesNavIcon />,
+    link: '/student-services',
   },
-  { key: 'blackboard', name: 'Blackboard', icon: <BlackboardNavIcon /> },
+  {
+    key: 'blackboard',
+    name: 'Blackboard',
+    icon: <BlackboardNavIcon />,
+    link: 'https://fdu.blackboard.com',
+  },
 ]
 
 export default tiles

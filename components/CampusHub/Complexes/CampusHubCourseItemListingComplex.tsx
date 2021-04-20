@@ -83,28 +83,14 @@ const CampusHubCourseItemListingComplex: React.VFC<Props> = ({
               <span>Is gradable</span>
               <input type="checkbox" name="chkIsGradable" />
             </div>
-            <div className="flex flex-col space-y-2 lg:flex-row lg:items-center lg:space-x-4 lg:space-y-0">
-              <div className="space-x-2 lg:space-x-4">
-                <span>Filter X</span>
-                <Select
-                  instanceId="selectFilterXTextMatchers"
-                  options={textMatchers}
-                  isClearable={false}
-                  isSearchable={false}
-                  className="inline-block min-w-[10rem]"
-                />
-              </div>
-              <input
-                type="text"
-                placeholder="Filter X keywords..."
-                className="flex-1 rounded"
-              />
+            <div className="space-y-2">
+              <button className="block w-full p-2 text-white transition-colors rounded bg-oxford-blue-light hover:cursor-pointer hover:bg-oxford-blue-dark">
+                Filter
+              </button>
+              <button className="block w-full p-2 text-white transition-colors rounded bg-vivid-burgundy hover:cursor-pointer hover:bg-oxford-blue-dark">
+                Reset
+              </button>
             </div>
-            <input
-              type="button"
-              value="Filter"
-              className="w-full p-2 text-white rounded bg-oxford-blue-light hover:cursor-pointer hover:bg-oxford-blue-dark"
-            />
           </fieldset>
         </form>
       </div>
