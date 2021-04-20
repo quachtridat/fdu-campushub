@@ -8,7 +8,11 @@ import Select from 'react-select'
 import LoginLayout from '@/components/Login/LoginLayout'
 import { signIn } from '@/lib/signIn'
 
-import { KeyIcon, QuestionMarkCircleIcon as QuestionMarkIcon, CogIcon as ConfigIcon } from '@heroicons/react/solid'
+import {
+  KeyIcon,
+  QuestionMarkCircleIcon as QuestionMarkIcon,
+  CogIcon as ConfigIcon,
+} from '@heroicons/react/solid'
 
 const duoMobileDevices: Array<{ value: string; label: string }> = [
   { value: 'ios', label: 'iOS' },
@@ -36,8 +40,7 @@ const DuoPage: NextPage = () => {
           <span className="flex flex-col items-center justify-center w-full space-y-2">
             <KeyIcon width={50} height={50} />
             <span className="font-bold text-center lg:text-lg">
-              2-factor authentication with Duo Mobile
-              &nbsp;
+              2-factor authentication with Duo Mobile &nbsp;
               <Link href="https://guide.duo.com/prompt">
                 <a className="inline-block align-baseline">
                   <QuestionMarkIcon height="1.25em" />

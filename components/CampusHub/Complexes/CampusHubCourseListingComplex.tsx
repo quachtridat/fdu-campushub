@@ -11,13 +11,9 @@ const textMatchers: Array<{ value: string; label: string }> = [
   { value: 'matches', label: 'matches' },
 ]
 
-type PropsType = React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
->
+type Props = React.ComponentProps<'div'>
 
-const CampusHubCourseListingComplex: React.FC<PropsType> = ({
-  className: otherClassName,
+const CampusHubCourseListingComplex: React.VFC<Props> = ({
   children: _,
   ...otherProps
 }) => {
@@ -28,11 +24,8 @@ const CampusHubCourseListingComplex: React.FC<PropsType> = ({
   }
 
   return (
-    <div
-      className={`border border-black rounded ${otherClassName}`}
-      {...otherProps}
-    >
-      <div className="p-2 border-b border-black">
+    <div {...otherProps}>
+      <div className="p-2 border-b border-l border-r border-black">
         <div className="flex flex-row items-center justify-between flex-1 space-x-4">
           <form className="flex flex-row items-center flex-1 h-full">
             <fieldset className="flex flex-row items-center flex-1 h-full space-x-2">
@@ -67,7 +60,9 @@ const CampusHubCourseListingComplex: React.FC<PropsType> = ({
         </div>
       </div>
       <div
-        className={`border-b border-black p-2 ${!isUsingFilters && 'hidden'}`}
+        className={`border-b border-l border-r border-black p-2 ${
+          !isUsingFilters && 'hidden'
+        }`}
       >
         <form>
           <fieldset className="flex flex-col space-y-6">
@@ -117,7 +112,7 @@ const CampusHubCourseListingComplex: React.FC<PropsType> = ({
           </fieldset>
         </form>
       </div>
-      <div className="p-2 space-y-6">
+      <div className="p-2 space-y-6 border-b border-l border-r border-black rounded-b">
         {courseList.map((courseEntry, courseIndex) => (
           <div
             key={courseIndex}

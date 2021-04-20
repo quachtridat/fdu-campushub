@@ -1,23 +1,17 @@
 import { MouseEventHandler, useState } from 'react'
-
 import Select from 'react-select'
-
+import { BasicSearchOption } from '@/interfaces/search-options'
+import { basicTextMatchers } from '@/globals/match-options/text-matchers'
+import { DocumentTextIcon as GenericItemIcon } from '@heroicons/react/solid'
 import itemList from '@/data/items/sample'
 
-import { DocumentTextIcon as GenericItemIcon } from '@heroicons/react/solid'
+const textMatchers: Array<BasicSearchOption> = basicTextMatchers.map(
+  (entry) => ({ value: entry, label: entry })
+)
 
-const textMatchers: Array<{ value: string; label: string }> = [
-  { value: 'contains', label: 'contains' },
-  { value: 'matches', label: 'matches' },
-]
+type Props = React.ComponentProps<'div'>
 
-type PropsType = React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
->
-
-const CampusHubCourseItemListingComplex: React.FC<PropsType> = ({
-  className: otherClassName,
+const CampusHubCourseItemListingComplex: React.VFC<Props> = ({
   children: _,
   ...otherProps
 }) => {
@@ -28,11 +22,8 @@ const CampusHubCourseItemListingComplex: React.FC<PropsType> = ({
   }
 
   return (
-    <div
-      className={`border border-black rounded ${otherClassName}`}
-      {...otherProps}
-    >
-      <div className="p-2 border-b border-black">
+    <div {...otherProps}>
+      <div className="p-2 border-b border-l border-r border-black">
         <div className="flex flex-row items-center justify-between flex-1 space-x-4">
           <form className="flex flex-row items-center flex-1 h-full">
             <fieldset className="flex flex-row items-center flex-1 h-full space-x-2">
@@ -65,10 +56,12 @@ const CampusHubCourseItemListingComplex: React.FC<PropsType> = ({
         </div>
       </div>
       <div
-        className={`border-b border-black p-2 ${!isUsingFilters && 'hidden'}`}
+        className={`border-b border-l border-r border-black p-2 ${
+          !isUsingFilters && 'hidden'
+        }`}
       >
         <form>
-         <fieldset className="flex flex-col space-y-6">
+          <fieldset className="flex flex-col space-y-6">
             <div className="flex flex-col space-y-2 lg:flex-row lg:items-center lg:space-x-4 lg:space-y-0">
               <div className="space-x-2 lg:space-x-4">
                 <span>Title</span>
@@ -115,7 +108,7 @@ const CampusHubCourseItemListingComplex: React.FC<PropsType> = ({
           </fieldset>
         </form>
       </div>
-      <div className="p-2 space-y-6">
+      <div className="p-2 space-y-6 border-b border-l border-r border-black rounded-b">
         {itemList.map((itemEntry, itemIndex) => (
           <div
             key={itemIndex}

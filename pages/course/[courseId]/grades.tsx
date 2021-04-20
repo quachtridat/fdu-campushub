@@ -3,12 +3,10 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'node:querystring'
 import { useState, useEffect, MouseEventHandler } from 'react'
-import ReactModal from 'react-modal';
+import ReactModal from 'react-modal'
 
-import CampusHubVerticalToolBar, {
-  ToolTile,
-} from '@/components/CampusHub/CampusHubVerticalToolBar'
-import CampusHubLayout from '@/components/CampusHub/CampusHubLayout'
+import CampusHubVerticalToolBar from '@/components/CampusHub/Standalones/Sidebars/CampusHubVerticalToolBar'
+import CampusHubLayout from '@/components/CampusHub/Layouts/CampusHubLayout'
 
 import Course from '@/interfaces/course'
 import Grade from '@/interfaces/grade'
@@ -16,17 +14,11 @@ import sampleCourses from '@/data/courses/sample'
 import { getCourseGrades } from '@/lib/grades'
 import { convertGradePoints, basicConvert } from '@/lib/grades'
 
-import {
-  TemplateIcon as OverviewNavIcon,
-  ClipboardIcon as AnnoucementsNavIcon,
-  DocumentTextIcon as DocumentsNavIcon,
-  PuzzleIcon as AssignmentsNavIcon,
-  ChatAlt2Icon as DiscussionsNavIcon,
-  ChartSquareBarIcon as GradesIcon,
-  HomeIcon as HomeNavIcon,
-  CalendarIcon,
-  XIcon as CloseIcon
-} from '@heroicons/react/outline'
+import toolTiles from '@/globals/tooltiles/coursepages.tooltiles'
+import { optionGroups as mainSearchOptions } from '@/globals/search-options/mainpages.options'
+import { optionGroups as courseSearchOptions } from '@/globals/search-options/coursepages.options'
+
+import { XIcon as CloseIcon } from '@heroicons/react/outline'
 
 import {
   DocumentReportIcon as GenericGradeIcon,
@@ -80,59 +72,6 @@ export const getStaticProps: GetStaticProps<Props, RouterQuery> = async (
   }
 }
 
-const navAddSearchOptions: Array<{ value: string; label: string }> = [
-  { value: 'course.overview', label: 'Course Overview' },
-  { value: 'course.announcements', label: 'Announcements' },
-  { value: 'course.documents', label: 'Documents' },
-  { value: 'course.assignments', label: 'Assignments' },
-  { value: 'course.discussions', label: 'Discussions' },
-  { value: 'course.grades', label: 'Grades' },
-  { value: 'course.calendar', label: 'Calendar' },
-  {
-    value: 'homepage',
-    label: 'Home',
-  },
-  {
-    value: 'courses',
-    label: 'Courses',
-  },
-  {
-    value: 'announcements',
-    label: 'Announcements',
-  },
-  {
-    value: 'grades',
-    label: 'Grades',
-  },
-  {
-    value: 'calendar',
-    label: 'Calendar',
-  },
-  {
-    value: 'student-services',
-    label: 'Student Services',
-  },
-  {
-    value: 'blackboard',
-    label: 'Blackboard',
-  },
-]
-
-const tiles: Array<ToolTile> = [
-  { key: 'homepage', name: 'Home', icon: <HomeNavIcon />, link: '/' },
-  { key: 'course.overview', name: 'Course Overview', icon: <OverviewNavIcon /> },
-  {
-    key: 'course.announcements',
-    name: 'Announcements',
-    icon: <AnnoucementsNavIcon />,
-  },
-  { key: 'course.documents', name: 'Documents', icon: <DocumentsNavIcon /> },
-  { key: 'course.assignments', name: 'Assignments', icon: <AssignmentsNavIcon /> },
-  { key: 'course.discusisons', name: 'Discussions', icon: <DiscussionsNavIcon /> },
-  { key: 'course.grades', name: 'Grades', icon: <GradesIcon /> },
-  { key: 'course.calendar', name: 'Calendar', icon: <CalendarIcon /> },
-]
-
 export const CourseGradesPage: NextPage<Props> = ({
   course: currentCourse,
 }) => {
@@ -150,9 +89,9 @@ export const CourseGradesPage: NextPage<Props> = ({
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.innerWidth < 1024/*lg*/) {
-      setShallUseModal(true);
-    } else setShallUseModal(false);
+    if (typeof window !== 'undefined' && window.innerWidth < 1024 /*lg*/) {
+      setShallUseModal(true)
+    } else setShallUseModal(false)
   })
 
   const handleOnClickGradeEntry: (
@@ -163,7 +102,7 @@ export const CourseGradesPage: NextPage<Props> = ({
       setActiveGradeEntryIndex(gradeEntryKey)
       setActiveGradeEntry(gradeEntry)
       if (shallUseModal) {
-        setIsModalOpen(true);
+        setIsModalOpen(true)
       }
     }
   }
@@ -173,13 +112,19 @@ export const CourseGradesPage: NextPage<Props> = ({
   }
 
   return (
-    <CampusHubLayout navDefinedSearchOptions={navAddSearchOptions}>
+    <CampusHubLayout
+      navDefinedSearchOptions={[
+        ...((currentCourse && courseSearchOptions(currentCourse.courseId)) ||
+          []),
+        ...mainSearchOptions,
+      ]}
+    >
       <Head>
         <title>FDU CampusHub</title>
       </Head>
       <div className="flex flex-row flex-1 pl-40 pt-[4rem]">
         <CampusHubVerticalToolBar
-          tiles={tiles && currentCourse ? tiles.map<ToolTile>((tile) => tile.key === 'course.overview' ? { ...tile, link: `/course/${currentCourse.courseId}/` } : tile) : tiles}
+          tiles={(currentCourse && toolTiles(currentCourse.courseId)) || []}
           activeTileKey="course.grades"
           className="fixed top-[4rem] z-50 left-0 w-40 h-full max-h-full bg-oxford-blue-dark"
         />
@@ -292,21 +237,32 @@ export const CourseGradesPage: NextPage<Props> = ({
                     onRequestClose={handleOnRequestCloseReactModal}
                     className="top-[5rem] left-44 right-8 border border-black rounded bg-white absolute"
                   >
-                    <CloseIcon width="2em" className="absolute bottom-auto left-auto right-1 top-1 hover:cursor-pointer" onClick={handleOnRequestCloseReactModal} />
-                    <div className="p-1 text-xs text-center text-gray-400 hover:cursor-pointer" onClick={handleOnRequestCloseReactModal}>
+                    <CloseIcon
+                      width="2em"
+                      className="absolute bottom-auto left-auto right-1 top-1 hover:cursor-pointer"
+                      onClick={handleOnRequestCloseReactModal}
+                    />
+                    <div
+                      className="p-1 text-xs text-center text-gray-400 hover:cursor-pointer"
+                      onClick={handleOnRequestCloseReactModal}
+                    >
                       To close, tap the X button
                     </div>
                     <div className="w-full max-w-xl px-4 pt-6 pb-6 mx-auto space-y-2">
-                      <p className="w-full p-2 text-2xl font-bold text-center text-white bg-oxford-blue-light">Comments from instructors</p>
+                      <p className="w-full p-2 text-2xl font-bold text-center text-white bg-oxford-blue-light">
+                        Comments from instructors
+                      </p>
                       <hr />
                       <p>
-                        {
-                          activeGradeEntry && activeGradeEntry.gradable.comments && activeGradeEntry.gradable.comments.length > 0 ?
-                          activeGradeEntry.gradable.comments :
+                        {activeGradeEntry &&
+                        activeGradeEntry.gradable.comments &&
+                        activeGradeEntry.gradable.comments.length > 0 ? (
+                          activeGradeEntry.gradable.comments
+                        ) : (
                           <span className="block w-full italic text-center">
                             **No comments have been given**
                           </span>
-                        }
+                        )}
                       </p>
                     </div>
                   </ReactModal>
