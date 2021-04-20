@@ -1,9 +1,6 @@
-type LayoutPropsType = React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
->
+type Props = React.ComponentProps<'div'>
 
-const Layout: React.FC<LayoutPropsType> = ({ children, ...otherProps }) => {
+const Layout: React.FC<Props> = ({ children, ...otherProps }) => {
   return <div {...otherProps}>{children}</div>
 }
 

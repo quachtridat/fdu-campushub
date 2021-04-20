@@ -4,137 +4,41 @@ import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'node:querystring'
 
 import Calendar from 'react-calendar'
-import CampusHubVerticalToolBar, {
-  ToolTile,
-} from '@/components/CampusHub/CampusHubVerticalToolBar'
-import CampusHubLayout from '@/components/CampusHub/CampusHubLayout'
-import CampusHubCourseItemListingComplex from '@/components/CampusHub/CampusHubCourseItemListingComplex'
+import CampusHubVerticalToolBar from '@/components/CampusHub/Standalones/Sidebars/CampusHubVerticalToolBar'
+import CampusHubLayout from '@/components/CampusHub/Layouts/CampusHubLayout'
+import CampusHubCourseItemListingComplex from '@/components/CampusHub/Complexes/CampusHubCourseItemListingComplex'
+import AnnouncementsBlock from '@/components/CampusHub/Blocks/CampusHubGenericBasicAnnouncementsBlock'
 
 import Announcement from '@/interfaces/announcement'
 import Course from '@/interfaces/course'
-import sampleAnnoucements from '@/data/announcements/sample'
 import sampleCourses from '@/data/courses/sample'
-
-import {
-  TemplateIcon as OverviewNavIcon,
-  ClipboardIcon as AnnoucementsNavIcon,
-  DocumentTextIcon as DocumentsNavIcon,
-  PuzzleIcon as AssignmentsNavIcon,
-  ChatAlt2Icon as DiscussionsNavIcon,
-  ChartSquareBarIcon as GradesIcon,
-  HomeIcon as HomeNavIcon,
-  CalendarIcon,
-  ArrowCircleLeftIcon,
-  ArrowCircleRightIcon
-} from '@heroicons/react/outline'
+import { getAnnouncementsHtml } from '@/lib/announcements'
+import toolTiles from '@/globals/tooltiles/coursepages.tooltiles'
+import { optionGroups as mainSearchOptions } from '@/globals/search-options/mainpages.options'
+import { optionGroups as courseSearchOptions } from '@/globals/search-options/coursepages.options'
 
 interface Props {
   course: Course
+  announcements: Array<Announcement>
 }
 
 export interface RouterQuery extends ParsedUrlQuery {
   courseId: string
 }
 
-const tiles: Array<ToolTile> = [
-  { key: 'homepage', name: 'Home', icon: <HomeNavIcon />, link: '/' },
-  { key: 'course.overview', name: 'Course Overview', icon: <OverviewNavIcon /> },
-  {
-    key: 'course.announcements',
-    name: 'Announcements',
-    icon: <AnnoucementsNavIcon />,
-  },
-  { key: 'course.documents', name: 'Documents', icon: <DocumentsNavIcon /> },
-  { key: 'course.assignments', name: 'Assignments', icon: <AssignmentsNavIcon /> },
-  { key: 'course.discussions', name: 'Discussions', icon: <DiscussionsNavIcon /> },
-  { key: 'course.grades', name: 'Grades', icon: <GradesIcon /> },
-  { key: 'course.calendar', name: 'Calendar', icon: <CalendarIcon /> },
-]
-
-const announcement: Announcement = sampleAnnoucements[0]
-
-export const getStaticPaths: GetStaticPaths<RouterQuery> = async () => {
-  return {
-    fallback: true,
-    paths: [],
-  }
-}
-
-export const getStaticProps: GetStaticProps<Props, RouterQuery> = async (
-  ctx
-) => {
-  if (!ctx.params)
-    return {
-      notFound: true,
-    }
-
-  const params = ctx.params
-  const courseId = Number.parseInt(params.courseId)
-
-  if (!courseId || isNaN(courseId))
-    return {
-      notFound: true,
-    }
-
-  const matchingCourse = sampleCourses.find(
-    (course) => course.courseId === courseId
-  )
-  if (!matchingCourse)
-    return {
-      notFound: true,
-    }
-
-  return {
-    props: {
-      course: matchingCourse,
-    },
-  }
-}
-
-const navAddSearchOptions: Array<{ value: string; label: string }> = [
-  { value: 'course.overview', label: 'Course Overview' },
-  { value: 'course.announcements', label: 'Announcements' },
-  { value: 'course.documents', label: 'Documents' },
-  { value: 'course.assignments', label: 'Assignments' },
-  { value: 'course.discussions', label: 'Discussions' },
-  { value: 'course.grades', label: 'Grades', },
-  { value: 'course.calendar', label: 'Calendar' },
-  {
-    value: 'homepage',
-    label: 'Home',
-  },
-  {
-    value: 'courses',
-    label: 'Courses',
-  },
-  {
-    value: 'announcements',
-    label: 'Announcements',
-  },
-  {
-    value: 'grades',
-    label: 'Grades',
-  },
-  {
-    value: 'calendar',
-    label: 'Calendar',
-  },
-  {
-    value: 'student-services',
-    label: 'Student Services',
-  },
-  {
-    value: 'blackboard',
-    label: 'Blackboard',
-  },
-]
-
-export const CoursePage: NextPage<Props> = ({ course: currentCourse }) => {
+export const CoursePage: NextPage<Props> = ({
+  course: currentCourse,
+  announcements,
+}) => {
   const router = useRouter()
 
   return (
     <CampusHubLayout
-      navDefinedSearchOptions={navAddSearchOptions}
+      navDefinedSearchOptions={[
+        ...((currentCourse && courseSearchOptions(currentCourse.courseId)) ||
+          []),
+        ...mainSearchOptions,
+      ]}
       footerClassName="pl-40"
     >
       <Head>
@@ -142,7 +46,7 @@ export const CoursePage: NextPage<Props> = ({ course: currentCourse }) => {
       </Head>
       <div className="flex flex-row flex-1 pl-40 pt-[4rem]">
         <CampusHubVerticalToolBar
-          tiles={tiles && currentCourse ? tiles.map<ToolTile>((tile) => tile.key === 'course.grades' ? { ...tile, link: `/course/${currentCourse.courseId}/grades` } : tile) : tiles}
+          tiles={(currentCourse && toolTiles(currentCourse.courseId)) || []}
           activeTileKey="course.overview"
           className="fixed top-[4rem] z-50 left-0 w-40 h-full max-h-full bg-oxford-blue-dark"
         />
@@ -198,31 +102,72 @@ export const CoursePage: NextPage<Props> = ({ course: currentCourse }) => {
                 />
               </div>
             </div>
-            <div className="w-full p-1">
-              <span className="flex flex-row items-center justify-between w-full p-2 text-4xl text-white transition-colors border-t border-l border-r border-black rounded-t-xl bg-oxford-blue-light hover:bg-oxford-blue-dark">
-                <ArrowCircleLeftIcon height="1em" className="shadow hover:cursor-pointer" />
-                <span>Announcements</span>
-                <ArrowCircleRightIcon height="1em" className="shadow hover:cursor-pointer" />
-              </span>
-              <div className="flex flex-col flex-1 w-full max-h-full p-2 space-y-1 bg-white border-b border-l border-r border-black rounded-b">
-                <span className="font-bold border-b border-black">
-                  {announcement.title}
-                </span>
-                <span className="border-b border-black">
-                  {announcement.announcer}{' '}
-                  {announcement.target ? <>&rarr; {announcement.target}</> : ''}
-                </span>
-                <span className="border-b border-black">
-                  {announcement.date}
-                </span>
-                <p className="w-100 h-100">{announcement.content}</p>
-              </div>
-            </div>
+            <AnnouncementsBlock
+              announcements={announcements}
+              className="w-full"
+            />
           </div>
         </main>
       </div>
     </CampusHubLayout>
   )
+}
+
+export const getStaticPaths: GetStaticPaths<RouterQuery> = async () => {
+  return {
+    fallback: true,
+    paths: [],
+  }
+}
+
+export const getStaticProps: GetStaticProps<Props, RouterQuery> = async (
+  ctx
+) => {
+  if (!ctx.params)
+    return {
+      notFound: true,
+    }
+
+  const params = ctx.params
+  const courseId = Number.parseInt(params.courseId)
+
+  if (!courseId || isNaN(courseId))
+    return {
+      notFound: true,
+    }
+
+  const matchingCourse = sampleCourses.find(
+    (course) => course.courseId === courseId
+  )
+  if (!matchingCourse)
+    return {
+      notFound: true,
+    }
+
+  return {
+    props: {
+      course: matchingCourse,
+      announcements: (
+        await getAnnouncementsHtml({
+          metaPredicate: (meta) =>
+            meta.target
+              ? meta.target.find(
+                  (elem) => elem.courseId == matchingCourse.courseId
+                )
+                ? true
+                : false
+              : false,
+        })
+      ).map((announcement) => ({
+        ...announcement,
+        postDate: announcement.postDate
+          ? typeof announcement.postDate === 'string'
+            ? announcement.postDate
+            : announcement.postDate.toLocaleString()
+          : 'No Date',
+      })),
+    },
+  }
 }
 
 export default CoursePage

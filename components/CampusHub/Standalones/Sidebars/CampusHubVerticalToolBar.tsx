@@ -9,15 +9,12 @@ export interface ToolTile {
   link?: string
 }
 
-interface Props {
+interface Props extends React.ComponentProps<'div'> {
   tiles: Array<ToolTile>
   activeTileKey?: string
 }
 
-type PropsType = Props &
-  React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
-
-const CampusHubVerticalToolBar: React.FC<PropsType> = ({
+const CampusHubVerticalToolBar: React.FC<Props> = ({
   tiles,
   activeTileKey,
   children: _,
@@ -32,7 +29,7 @@ const CampusHubVerticalToolBar: React.FC<PropsType> = ({
 
   return (
     <div
-      className={`min-w-max space-y-4 py-4 bg-oxford-blue-dark text-white flex flex-col ${
+      className={`min-w-min space-y-4 py-4 bg-oxford-blue-dark text-white flex flex-col flex-1 ${
         propClassName || ''
       }`}
       {...otherProps}
@@ -71,8 +68,8 @@ const CampusHubVerticalToolBar: React.FC<PropsType> = ({
         </span>
       </div>
       <div className="h-full pb-16 space-y-6 overflow-y-auto">
-        {
-          tiles ? tiles.map((tile, tileIdx) => {
+        {tiles ? (
+          tiles.map((tile, tileIdx) => {
             const inner = (
               <div className="flex flex-col items-center justify-around w-20 py-2 mx-auto transition transform group-hover:translate-y-1">
                 <span className="w-1/2">{tile.icon}</span>
@@ -101,8 +98,10 @@ const CampusHubVerticalToolBar: React.FC<PropsType> = ({
                 )}
               </div>
             )
-          }) : <></>
-        }
+          })
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   )

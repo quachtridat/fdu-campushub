@@ -1,12 +1,9 @@
-type PropsType = React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
->
+type Props = React.ComponentProps<'div'>
 
 import Link from 'next/link'
 import Image from 'next/image'
 
-const LoginLayout: React.FC<PropsType> = ({
+const LoginLayout: React.FC<Props> = ({
   children,
   className: propClassName,
   ...otherProps
@@ -15,9 +12,7 @@ const LoginLayout: React.FC<PropsType> = ({
     // #login-layout: has background-image (@/styles/globals.css)
     <div
       id="login-layout"
-      className={`flex flex-col flex-1 ${
-        propClassName || ''
-      }`}
+      className={`flex flex-col flex-1 ${propClassName || ''}`}
       {...otherProps}
     >
       <div className="top-0 left-0 flex flex-row items-center justify-between flex-shrink-0 w-full p-2 space-x-2 text-center bg-white border-b border-black border-solid">
@@ -30,7 +25,9 @@ const LoginLayout: React.FC<PropsType> = ({
             />
           </a>
         </Link>
-        <span className="text-xl font-bold lg:text-4xl">Login Authentication</span>
+        <span className="text-xl font-bold lg:text-4xl">
+          Login Authentication
+        </span>
         <Link href="/">
           <a className="w-[300px]">
             <Image

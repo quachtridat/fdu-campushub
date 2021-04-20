@@ -2,18 +2,20 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { MouseEventHandler } from 'react'
-import Select from 'react-select'
+import { createFilter } from 'react-select'
+import SearchBar from '@/components/CampusHub/Standalones/SearchBars/CampusHubSearchBar'
+import {
+  BasicSearchOption,
+  BasicSearchOptionGroup,
+} from '@/interfaces/search-options'
 import { signOut } from '@/lib/signOut'
 import { MenuIcon } from '@heroicons/react/outline'
 
-interface Props {
-  definedSearchOptions?: Array<{ value: string; label: string }>
+interface Props extends React.ComponentProps<'div'> {
+  definedSearchOptions?: Array<BasicSearchOption | BasicSearchOptionGroup>
 }
 
-type PropsType = Props &
-  React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
-
-const CampusHubNavBar: React.FC<PropsType> = ({
+const CampusHubNavBar: React.FC<Props> = ({
   definedSearchOptions,
   children: _,
   className: propClassName,
@@ -36,7 +38,7 @@ const CampusHubNavBar: React.FC<PropsType> = ({
       {...otherProps}
     >
       <span className="flex items-center justify-around flex-shrink-0 w-40 text-center">
-        <Link href="https://fdu.edu/">
+        <Link href="/">
           <a>
             <Image
               src="/static/fdu/fdumarkreversed.jpg"
@@ -49,18 +51,22 @@ const CampusHubNavBar: React.FC<PropsType> = ({
       <div className="flex flex-row flex-1 h-full space-x-4">
         <form className="flex flex-row flex-1 h-full">
           <fieldset className="flex flex-row items-center flex-1 h-full space-x-2">
-            <Select
+            <SearchBar
               instanceId="selectNavBarSearch"
               placeholder="Search"
               isClearable={true}
               options={definedSearchOptions}
+              filterOption={createFilter({
+                ignoreAccents: true,
+                ignoreCase: true,
+                matchFrom: 'any',
+                trim: true,
+              })}
               className="flex-1 border border-black rounded focus:ring-oxford-blue-dark focus:border-oxford-blue-dark"
             />
-            <input
-              type="button"
-              value="Search"
-              className="px-4 py-2 text-white rounded bg-oxford-blue-light hover:cursor-pointer hover:bg-oxford-blue-dark"
-            />
+            <button className="px-4 py-2 text-white rounded bg-oxford-blue-light hover:cursor-pointer hover:bg-oxford-blue-dark">
+              Search
+            </button>
           </fieldset>
         </form>
         <form className="flex flex-row self-end h-full">
