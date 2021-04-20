@@ -1,5 +1,9 @@
 import Link from 'next/link'
-import Select, { Props as SelectProps, OptionProps } from 'react-select'
+import Select, {
+  Props as SelectProps,
+  OptionProps,
+  createFilter,
+} from 'react-select'
 import {
   HyperlinkedSearchOption,
   HyperlinkedSearchOptionGroup,
@@ -27,7 +31,20 @@ const Option: React.VFC<OptionProps<OptionType, boolean, OptionGroupType>> = (
 }
 
 const CampusHubSearchBar: React.VFC<Props> = (props) => {
-  return <Select components={{ Option }} {...props} />
+  return (
+    <Select
+      isClearable={true}
+      isSearchable={true}
+      filterOption={createFilter({
+        ignoreAccents: true,
+        ignoreCase: true,
+        matchFrom: 'any',
+        trim: true,
+      })}
+      components={{ Option }}
+      {...props}
+    />
+  )
 }
 
 export default CampusHubSearchBar

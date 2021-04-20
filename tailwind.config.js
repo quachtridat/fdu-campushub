@@ -14,6 +14,10 @@ module.exports = {
         sans: ['Nunito'],
         body: ['Nunito'],
       },
+      screens: {
+        portrait: { raw: '(orientation: portrait)' },
+        landscape: { raw: '(orientation: landscape)' },
+      },
     },
   },
   variants: {

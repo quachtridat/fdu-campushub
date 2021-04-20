@@ -1,26 +1,88 @@
 import Link from 'next/link'
-import { MouseEventHandler, useState } from 'react'
-import Select from 'react-select'
+import { MouseEventHandler, useEffect, useState } from 'react'
+import Select, { createFilter } from 'react-select'
 
-import courseList from '@/data/courses/sample'
-
+import Course from '@/interfaces/course'
+import SearchBar from '@/components/CampusHub/Standalones/SearchBars/CampusHubSearchBar'
+import { basicTextMatchers } from '@/globals/match-options/text-matchers'
+import { BasicSearchOption } from '@/interfaces/search-options'
 import { BookOpenIcon as GenericCourseIcon } from '@heroicons/react/solid'
 
-const textMatchers: Array<{ value: string; label: string }> = [
-  { value: 'contains', label: 'contains' },
-  { value: 'matches', label: 'matches' },
-]
+const textMatchers: Array<BasicSearchOption> = basicTextMatchers.map(
+  (entry) => ({
+    value: entry,
+    label: entry,
+  })
+)
 
-type Props = React.ComponentProps<'div'>
+interface Props extends React.ComponentProps<'div'> {
+  courses: Array<Course>
+}
 
 const CampusHubCourseListingComplex: React.VFC<Props> = ({
+  courses,
   children: _,
   ...otherProps
 }) => {
   const [isUsingFilters, setIsUsingFilters] = useState(false)
 
-  const handleOnClickButtonFilters: MouseEventHandler<HTMLInputElement> = () => {
+  const handleOnClickButtonFilters: MouseEventHandler = () => {
     setIsUsingFilters(!isUsingFilters)
+  }
+
+  const [filteredCourses, setFilteredCourses] = useState<Array<Course>>([])
+  const [
+    courseCodeMatcher,
+    setCourseCodeMatcher,
+  ] = useState<BasicSearchOption>()
+  const [
+    courseNameMatcher,
+    setCourseNameMatcher,
+  ] = useState<BasicSearchOption>()
+  const [courseCodeKeywords, setCourseCodeKeywords] = useState<string>('')
+  const [courseNameKeywords, setCourseNameKeywords] = useState<string>('')
+
+  useEffect(() => {
+    if (courses) setFilteredCourses(courses)
+  }, courses)
+
+  const handleOnClickButtonFilter: MouseEventHandler = (e) => {
+    e.preventDefault()
+    if (courses)
+      setFilteredCourses(
+        courses.filter((course) => {
+          if (courseCodeKeywords && courseCodeMatcher) {
+            if (
+              (courseCodeMatcher.value === 'contains' &&
+                !course.courseCode.includes(courseCodeKeywords)) ||
+              (courseCodeMatcher.value === 'matches' &&
+                course.courseCode !== courseCodeKeywords)
+            ) {
+              return undefined
+            }
+          }
+          if (courseNameKeywords && courseNameMatcher) {
+            if (
+              (courseNameMatcher.value === 'contains' &&
+                !course.courseName.includes(courseNameKeywords)) ||
+              (courseNameMatcher.value === 'matches' &&
+                course.courseName !== courseNameKeywords)
+            ) {
+              return undefined
+            }
+          }
+          return course
+        })
+      )
+  }
+
+  const handleOnClickButtonReset: MouseEventHandler = (e) => {
+    e.preventDefault()
+    if (courses) setFilteredCourses(courses)
+    setCourseCodeKeywords('')
+    setCourseNameKeywords('')
+    setCourseCodeMatcher(undefined)
+    setCourseNameMatcher(undefined)
   }
 
   return (
@@ -29,15 +91,21 @@ const CampusHubCourseListingComplex: React.VFC<Props> = ({
         <div className="flex flex-row items-center justify-between flex-1 space-x-4">
           <form className="flex flex-row items-center flex-1 h-full">
             <fieldset className="flex flex-row items-center flex-1 h-full space-x-2">
-              <Select
+              <SearchBar
                 instanceId="selectCourseListingSearch"
+                placeholder="Search"
                 isClearable={true}
-                options={courseList.map<{ label: string; value: string }>(
-                  (courseEntry) => ({
-                    value: courseEntry.courseId.toString(10),
-                    label: `${courseEntry.courseCode} ${courseEntry.courseName}`,
-                  })
-                )}
+                filterOption={createFilter({
+                  ignoreAccents: true,
+                  ignoreCase: true,
+                  matchFrom: 'any',
+                  trim: true,
+                })}
+                options={courses.map((courseEntry) => ({
+                  value: courseEntry.courseId.toString(10),
+                  label: `${courseEntry.courseCode} ${courseEntry.courseName}`,
+                  link: `/course/${courseEntry.courseId}/`,
+                }))}
                 className="flex-1 border border-black rounded focus:ring-oxford-blue-dark focus:border-oxford-blue-dark"
               />
               <input
@@ -68,52 +136,65 @@ const CampusHubCourseListingComplex: React.VFC<Props> = ({
           <fieldset className="flex flex-col space-y-6">
             <div className="flex flex-col space-y-2 lg:flex-row lg:items-center lg:space-x-4 lg:space-y-0">
               <div className="space-x-2 lg:space-x-4">
-                <span>Title</span>
+                <span>Course Code</span>
                 <Select
-                  instanceId="selectItemTitleTextMatchers"
+                  instanceId="selectCourseCodeTextMatchers"
                   options={textMatchers}
                   isClearable={false}
                   isSearchable={false}
+                  value={courseCodeMatcher || null}
+                  onChange={(opt) => opt && setCourseCodeMatcher(opt)}
                   className="inline-block min-w-[10rem]"
                 />
               </div>
               <input
                 type="text"
-                placeholder="Title keywords..."
+                placeholder="Course code keywords..."
+                value={courseCodeKeywords}
+                onChange={(e) => setCourseCodeKeywords(e.target.value)}
                 className="flex-1 rounded"
               />
-            </div>
-            <div className="flex flex-row space-x-2 lg:items-center lg:space-x-4">
-              <span>Is gradable</span>
-              <input type="checkbox" name="chkIsGradable" />
             </div>
             <div className="flex flex-col space-y-2 lg:flex-row lg:items-center lg:space-x-4 lg:space-y-0">
               <div className="space-x-2 lg:space-x-4">
-                <span>Filter X</span>
+                <span>Course Name</span>
                 <Select
-                  instanceId="selectFilterXTextMatchers"
+                  instanceId="selectCourseNameTextMatchers"
                   options={textMatchers}
                   isClearable={false}
                   isSearchable={false}
+                  value={courseNameMatcher || null}
+                  onChange={(opt) => opt && setCourseNameMatcher(opt)}
                   className="inline-block min-w-[10rem]"
                 />
               </div>
               <input
                 type="text"
-                placeholder="Filter X keywords..."
+                placeholder="Course name keywords..."
+                value={courseNameKeywords}
+                onChange={(e) => setCourseNameKeywords(e.target.value)}
                 className="flex-1 rounded"
               />
             </div>
-            <input
-              type="button"
-              value="Filter"
-              className="w-full p-2 text-white rounded bg-oxford-blue-light hover:cursor-pointer hover:bg-oxford-blue-dark"
-            />
+            <div className="space-y-2">
+              <button
+                onClick={handleOnClickButtonFilter}
+                className="block w-full p-2 text-white transition-colors rounded bg-oxford-blue-light hover:cursor-pointer hover:bg-oxford-blue-dark"
+              >
+                Filter
+              </button>
+              <button
+                onClick={handleOnClickButtonReset}
+                className="block w-full p-2 text-white transition-colors rounded bg-vivid-burgundy hover:cursor-pointer hover:bg-oxford-blue-dark"
+              >
+                Reset
+              </button>
+            </div>
           </fieldset>
         </form>
       </div>
       <div className="p-2 space-y-6 border-b border-l border-r border-black rounded-b">
-        {courseList.map((courseEntry, courseIndex) => (
+        {filteredCourses.map((courseEntry, courseIndex) => (
           <div
             key={courseIndex}
             className="w-full px-2 py-4 transition transform border border-black rounded hover:translate-y-1 hover:cursor-pointer group"

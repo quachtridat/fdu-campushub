@@ -5,16 +5,19 @@ import Calendar from 'react-calendar'
 import CampusHubVerticalToolBar from '@/components/CampusHub/Standalones/Sidebars/CampusHubVerticalToolBar'
 import Layout from '@/components/CampusHub/Layouts/CampusHubLayout'
 import GenericComplexLayout from '@/components/CampusHub/Complexes/CampusHubGenericComplexLayout'
-import CourseListingComplex from '@/components/CampusHub/Complexes/CampusHubCourseListingComplex'
+import CourseListingBlock from '@/components/CampusHub/Blocks/CampusHubGenericBasicCourseListingBlock'
 import StudentProfileBasicComplex from '@/components/CampusHub/Complexes/CampusHubStudentProfileBasicComplex'
 import AnnouncementsBlock from '@/components/CampusHub/Blocks/CampusHubGenericBasicAnnouncementsBlock'
+import Course from '@/interfaces/course'
 import Announcement from '@/interfaces/announcement'
 import { getAnnouncementsHtml } from '@/lib/announcements'
 import { basicConvert, convertGradePoints } from '@/lib/grades'
 import tiles from '@/globals/tooltiles/mainpages.tooltiles'
 import { optionGroups as searchOptions } from '@/globals/search-options/mainpages.options'
+import sampleCourses from '@/data/courses/sample'
 
 interface Props {
+  courses: Array<Course>
   announcements: Array<Announcement>
 }
 
@@ -46,7 +49,7 @@ const recentGradeUpdates: Array<Grade> = [
   },
 ]
 
-const MainPage: NextPage<Props> = ({ announcements }) => {
+const MainPage: NextPage<Props> = ({ courses, announcements }) => {
   return (
     <Layout navDefinedSearchOptions={searchOptions} footerClassName="pl-40">
       <Head>
@@ -90,12 +93,7 @@ const MainPage: NextPage<Props> = ({ announcements }) => {
                 ))}
               </div>
             </GenericComplexLayout>
-            <GenericComplexLayout
-              headCenter="Course Listing"
-              className="w-full mx-auto"
-            >
-              <CourseListingComplex />
-            </GenericComplexLayout>
+            <CourseListingBlock courses={courses} className="w-full mx-auto" />
           </div>
           <div className="flex-col items-center hidden w-full max-w-md p-8 space-y-12 lg:flex lg:max-w-lg bg-gray-50">
             <GenericComplexLayout headCenter="Calendar" className="w-full">
@@ -115,6 +113,7 @@ const MainPage: NextPage<Props> = ({ announcements }) => {
 export const getStaticProps: GetStaticProps<Props> = async () => {
   return {
     props: {
+      courses: sampleCourses,
       announcements: (await getAnnouncementsHtml()).map((announcement) => ({
         ...announcement,
         postDate: announcement.postDate

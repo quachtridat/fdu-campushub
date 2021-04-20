@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { MouseEventHandler, useState } from 'react'
-import Select from 'react-select'
+import SearchBar from '@/components/CampusHub/Standalones/SearchBars/CampusHubSearchBar'
 
 export interface ToolTile {
   key: string
@@ -40,20 +40,19 @@ const CampusHubVerticalToolBar: React.FC<Props> = ({
             <legend className="w-full text-center">Filter</legend>
             {filterExpanded ? (
               <>
-                <Select
+                <SearchBar
                   instanceId="selectVerticalToolBarSearch"
                   placeholder="Search Tools"
-                  isClearable={true}
-                  options={tiles.map<{ value: string; label: string }>(
-                    (tile) => ({ value: tile.key, label: tile.name })
-                  )}
+                  options={tiles.map((tile) => ({
+                    value: tile.key,
+                    label: tile.name,
+                    link: tile.link,
+                  }))}
                   className="w-full text-black rounded focus:ring-vivid-burgundy focus:border-vivid-burgundy"
                 />
-                <input
-                  type="button"
-                  value="Search"
-                  className="w-full px-4 py-2 text-white rounded bg-vivid-burgundy hover:cursor-pointer"
-                />
+                <button className="w-full px-4 py-2 text-white transition-colors rounded bg-vivid-burgundy hover:cursor-pointer hover:bg-oxford-blue-dark">
+                  Search
+                </button>
               </>
             ) : (
               <></>

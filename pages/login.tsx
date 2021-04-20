@@ -1,5 +1,6 @@
 import { NextPage } from 'next'
 import Head from 'next/head'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { MouseEventHandler, useState } from 'react'
 
@@ -27,6 +28,22 @@ const LoginPage: NextPage = () => {
       <Head>
         <title>FDU CampusHub</title>
       </Head>
+      <div className="bg-wrapper fixed h-screen w-screen overflow-hidden z-[-1] portrait:hidden">
+        <Image
+          alt="Login Background"
+          src="/static/fdu/login.jpg"
+          layout="fill"
+          objectFit="cover"
+        />
+      </div>
+      <div className="bg-wrapper fixed h-screen w-screen overflow-hidden z-[-1] hidden portrait:block">
+        <Image
+          alt="Login Background"
+          src="/static/fdu/login-vertical.jpg"
+          layout="fill"
+          objectFit="cover"
+        />
+      </div>
       <div
         id="login-wrapper"
         className="flex flex-col items-center justify-center flex-1 px-[20%] py-4 space-y-16"
@@ -39,10 +56,11 @@ const LoginPage: NextPage = () => {
             </span>
           </span>
           <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-2">
-            <div className="flex flex-col justify-between space-y-4">
+            <form className="flex flex-col justify-between space-y-4">
               <div>
                 <label htmlFor="inputTxtFduNetId">FDU NetID</label>
                 <input
+                  autoComplete="username"
                   name="inputTxtFduNetId"
                   type="text"
                   placeholder="example@student.fdu.edu"
@@ -52,6 +70,7 @@ const LoginPage: NextPage = () => {
               <div>
                 <label htmlFor="inputTxtPassword">Password</label>
                 <input
+                  autoComplete="current-password"
                   name="inputTxtPassword"
                   type="password"
                   placeholder="Password"
@@ -66,7 +85,7 @@ const LoginPage: NextPage = () => {
                   className="w-full p-2 text-white transition-colors border border-black rounded bg-vivid-burgundy hover:bg-oxford-blue-dark focus:ring focus:ring-vivid-burgundy hover:cursor-pointer"
                 />
               </span>
-            </div>
+            </form>
             <div className="flex flex-col justify-around px-4 py-2 space-y-2 border border-black">
               {!isInForgotPassword ? (
                 <>

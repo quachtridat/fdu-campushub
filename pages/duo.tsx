@@ -32,6 +32,22 @@ const DuoPage: NextPage = () => {
 
   return (
     <LoginLayout id="login-layout">
+      <div className="bg-wrapper fixed h-screen w-screen overflow-hidden z-[-1] portrait:hidden">
+        <Image
+          alt="Login Background"
+          src="/static/fdu/login.jpg"
+          layout="fill"
+          objectFit="cover"
+        />
+      </div>
+      <div className="bg-wrapper fixed h-screen w-screen overflow-hidden z-[-1] hidden portrait:block">
+        <Image
+          alt="Login Background"
+          src="/static/fdu/login-vertical.jpg"
+          layout="fill"
+          objectFit="cover"
+        />
+      </div>
       <div
         id="login-wrapper"
         className="flex flex-col items-center justify-center flex-1 px-[20%] py-4 space-y-16"

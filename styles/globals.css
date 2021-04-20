@@ -49,16 +49,6 @@
   }
 }
 
-#login-layout {
-  background-image: url('/static/fdu/login.jpg');
-}
-
-@media screen and (orientation: portrait) {
-  #login-layout {
-    background-image: url('/static/fdu/login-vertical.jpg');
-  }
-}
-
 #login-wrapper {
   background-color: rgba(0, 0, 0, 0.75);
 }

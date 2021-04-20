@@ -2,7 +2,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { MouseEventHandler } from 'react'
-import { createFilter } from 'react-select'
 import SearchBar from '@/components/CampusHub/Standalones/SearchBars/CampusHubSearchBar'
 import {
   BasicSearchOption,
@@ -54,14 +53,7 @@ const CampusHubNavBar: React.FC<Props> = ({
             <SearchBar
               instanceId="selectNavBarSearch"
               placeholder="Search"
-              isClearable={true}
               options={definedSearchOptions}
-              filterOption={createFilter({
-                ignoreAccents: true,
-                ignoreCase: true,
-                matchFrom: 'any',
-                trim: true,
-              })}
               className="flex-1 border border-black rounded focus:ring-oxford-blue-dark focus:border-oxford-blue-dark"
             />
             <button className="px-4 py-2 text-white rounded bg-oxford-blue-light hover:cursor-pointer hover:bg-oxford-blue-dark">
